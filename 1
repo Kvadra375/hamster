@@ -1,0 +1,40 @@
+function tapButtonIfEnergyHigh() {
+  const energy = parseInt(document.getElementsByClassName("user-tap-energy")[0].getElementsByTagName("p")[0].textContent.split("/")[0]);
+  if (energy > 25) {
+    const evt1 = new PointerEvent('pointerdown', { clientX: 150, clientY: 300 });
+    const evt2 = new PointerEvent('pointerup', { clientX: 150, clientY: 300 });
+    document.getElementsByClassName('user-tap-button')[0].dispatchEvent(evt1);
+    document.getElementsByClassName('user-tap-button')[0].dispatchEvent(evt2);
+  }
+}
+
+let isPaused = false;
+let timerInterval;
+
+function pauseScript() {
+  isPaused = true;
+  console.log('Скрипт поставлен на паузу. Запуск через 5 минут.');
+
+  let secondsLeft = 400;
+  timerInterval = setInterval(() => {
+    console.log(`Запуск через ${secondsLeft} секунд...`);
+    secondsLeft--;
+    if (secondsLeft < 0) {
+      clearInterval(timerInterval);
+      isPaused = false;
+      console.log('Скрипт возобновлен.');
+    }
+  }, 1000);
+}
+
+setInterval(() => {
+  if (!isPaused) {
+    tapButtonIfEnergyHigh();
+  }
+}, 50);
+
+setInterval(() => {
+  if (!isPaused) {
+    pauseScript();
+  }
+}, 20000); // каждые 5 минут (300000 миллисекунд)
